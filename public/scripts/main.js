@@ -19,6 +19,7 @@ function connectEvents(){
 		if(data.powermate && data.powermate.buttonPressed){
 			mostRecentCrashDate = new Date();
 			render();
+			$.post(API_ROOT+'crashes/xcode');
 		}
 	}, false);
 }
@@ -36,14 +37,14 @@ function updateCrashes(){
 function render(){
 	var daysSinceLastCrash;
 	var counterEl = $('.counter');
-	var unitsEl = $('.caption .units.days');
+	var unitsEl = $('.caption .units');
 
 	if(mostRecentCrashDate){
-		daysSinceLastCrash = moment().startOf('day').diff(moment(mostRecentCrashDate).startOf('day'), 'days');
+		daysSinceLastCrash = moment().startOf('hour').diff(moment(mostRecentCrashDate).startOf('hour'), 'hours');
 	} else {
 		daysSinceLastCrash = '?';
 	}
 
 	counterEl.text(daysSinceLastCrash);
-	unitsEl.text((daysSinceLastCrash === 1) ? "day" : "days");
+	unitsEl.text((daysSinceLastCrash === 1) ? "hour" : "hours");
 }
