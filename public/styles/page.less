@@ -30,16 +30,25 @@ body {
 }
 
 .interactions {
-	position: absolute;
+	position: fixed;
 	bottom: 0;
 	right: 28px;
+	left: 40px;
 	height: 80px;
 	font-size: 24px;
 	opacity: 0.25;
+	line-height: 55px;
 
 	.reset {
 		background: url('../images/powermate_buttonpress.png') no-repeat;
 		text-indent: 61px;
-		line-height: 55px;
+		position: absolute;
+		right: 0;
+	}
+
+	.achievement {
+		font-size: 19px;
+		position: absolute;
+		left: 0;
 	}
 }
