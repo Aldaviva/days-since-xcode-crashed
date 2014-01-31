@@ -2,7 +2,7 @@ var API_ROOT = "/cgi-bin/";
 var CRASH_NAME = "xcode";
 
 var ACHIEVEMENTS = [
-	 { name: "contra",                     hours:    0.168 },
+	 { name: "contra speedrun",            hours:    0.168 },
 	 { name: "transcontinental blackbird", hours:    1.132 },
 	 { name: "energetic",                  hours:    5.000 },
 	 { name: "business day",               hours:    8.000 },
@@ -10,6 +10,9 @@ var ACHIEVEMENTS = [
 	 { name: "daily restart",              hours:   24.000 },
 	 { name: "cannonball run",             hours:   28.842 },
 	 { name: "a full deck",                hours:   52.000 },
+	 { name: "around the world",           hours:   67.017 }, //http://en.wikipedia.org/wiki/Virgin_Atlantic_GlobalFlyer
+	 { name: "long weekend",               hours:   72.000 },
+	 { name: "Oh the humanity!",           hours:   77.133 },
 	 { name: "titanic voyage",             hours:   87.800 },
 	 { name: "to the moon",                hours:  102.750 },
 	 { name: "eww",                        hours:  144.000 },
@@ -68,7 +71,7 @@ function render(){
 	var unitsEl = $('.caption .units');
 
 	if(mostRecentCrashDate){
-		hoursSinceLastCrash = moment().startOf('hour').diff(moment(mostRecentCrashDate).startOf('hour'), 'hours');
+		hoursSinceLastCrash = Math.floor(getHoursSinceLastCrash());
 	} else {
 		hoursSinceLastCrash = '?';
 	}
@@ -80,17 +83,22 @@ function render(){
 }
 
 function renderArchievement(){
-	var hoursSinceLastCrash = moment().diff(mostRecentCrashDate, 'seconds')/60/60;
+	var hoursSinceLastCrash = getHoursSinceLastCrash();
 	var achievementEl = $('.achievement');
 	var achievement = _(ACHIEVEMENTS)
 		.filter(function(ach){
-			return ach.hours < hoursSinceLastCrash;
+			return ach.hours <= hoursSinceLastCrash;
 		})
 		.max("hours")
 		.value();
 
-	achievementEl.toggle(!!achievement);
-	if(achievement){
+	var isAchievement = _.isObject(achievement);
+	achievementEl.toggle(isAchievement);
+	if(isAchievement){
 		$('.achievement').text("achievement unlocked: "+achievement.name+" ("+achievement.hours+" hours)");
 	}
+}
+
+function getHoursSinceLastCrash(){
+	return moment().diff(mostRecentCrashDate, 'seconds')/60/60;
 }
